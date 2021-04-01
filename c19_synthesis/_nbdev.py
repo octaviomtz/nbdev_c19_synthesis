@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"to_rgb": "00_core.ipynb",
+index = {"device": "00_core.ipynb",
+         "to_rgb": "00_core.ipynb",
          "apply_dbscan_to_mask": "00_core.ipynb",
          "grid_search_DBSCAN_params": "00_core.ipynb",
          "label_mask_and_add_to_clusters": "00_core.ipynb",
@@ -19,8 +20,7 @@ index = {"to_rgb": "00_core.ipynb",
          "path_source": "00_core.ipynb",
          "path_dest": "00_core.ipynb"}
 
-modules = ["core.py",
-           "None.py"]
+modules = ["core.py"]
 
 doc_url = "https://octaviomtz.github.io/c19_synthesis/"
 
