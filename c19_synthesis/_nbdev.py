@@ -19,7 +19,8 @@ index = {"to_rgb": "00_core.ipynb",
          "path_source": "00_core.ipynb",
          "path_dest": "00_core.ipynb"}
 
-modules = ["core.py"]
+modules = ["core.py",
+           "None.py"]
 
 doc_url = "https://octaviomtz.github.io/c19_synthesis/"
 
