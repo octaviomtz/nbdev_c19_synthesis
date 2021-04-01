@@ -20,7 +20,8 @@ import sys
 from scipy.ndimage import binary_closing
 from scipy.ndimage import distance_transform_bf
 from google.colab import drive
-
+from skimage import measure
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import matplotlib.pyplot as plt
 import time
