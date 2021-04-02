@@ -3,7 +3,8 @@
 __all__ = ['device', 'to_rgb', 'apply_dbscan_to_mask', 'grid_search_DBSCAN_params', 'label_mask_and_add_to_clusters',
            'merge_labeled_clusters', 'merge_labeled_clusters', 'get_min_max', 'pad_two_size_multiple_32',
            'correct_label_in_plot', 'get_big_lesions_labels', 'read_covid_CT_and_mask', 'normalize_rotate',
-           'normalizePatches', 'plot_3d_2', 'len_multiple_32', 'select_lesions_match_conditions']
+           'normalizePatches', 'plot_3d_2', 'len_multiple_32', 'select_lesions_match_conditions',
+           'make_list_of_targets_and_seeds']
 
 # Cell
 import cv2
@@ -333,7 +334,7 @@ def len_multiple_32(ch, factor = 32):
     return ch_min, ch_max, ch_len_multiple32
 
 # Cell
-def select_lesions_match_conditions(small_lesions, skip_index=1, max_size=np.inf):
+def select_lesions_match_conditions(small_lesions, target_img_covid, SLICE=50, skip_index=1, max_size=np.inf):
   target_minis = []
   target_minis_coords = []
   target_minis_masks = []
@@ -355,3 +356,24 @@ def select_lesions_match_conditions(small_lesions, skip_index=1, max_size=np.inf
         target_minis_coords_big.append((y_min, y_max, x_min, x_max))
         target_minis_masks_big.append(mask_mini)
   return target_minis, target_minis_coords, target_minis_masks, target_minis_big, target_minis_coords_big, target_minis_masks_big
+
+# Cell
+def make_list_of_targets_and_seeds(tgt_small, targets=False, seeds=False, seed_value=1):
+  '''if no list is sent create lists of targets and their seeds, if a list is sent, append the new values '''
+  if targets==False:
+    targets = []
+    seeds = []
+  for i in tgt_small:
+    target_temp = np.zeros((np.shape(i)[0],np.shape(i)[1],2))
+    target_temp[...,0] = i
+    mask_mini_closed = binary_closing(i>0)
+    target_temp[...,1] = mask_mini_closed
+    targets.append((target_temp).astype('float32'))
+    mask_mini_dt = distance_transform_bf(mask_mini_closed)
+    seed = mask_mini_dt==np.max(mask_mini_dt)
+    if np.sum(seed)>1:
+      yy, xx = np.where(seed==1)
+      seed = np.zeros_like(mask_mini_dt)
+      seed[yy[0], xx[0]] = seed_value
+    seeds.append(seed)
+  return targets, seeds
