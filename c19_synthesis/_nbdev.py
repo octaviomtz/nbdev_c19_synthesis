@@ -16,9 +16,8 @@ index = {"device": "00_core.ipynb",
          "normalize_rotate": "00_core.ipynb",
          "normalizePatches": "00_core.ipynb",
          "plot_3d_2": "00_core.ipynb",
-         "filename": "00_core.ipynb",
-         "path_source": "00_core.ipynb",
-         "path_dest": "00_core.ipynb"}
+         "len_multiple_32": "00_core.ipynb",
+         "select_lesions_match_conditions": "00_core.ipynb"}
 
 modules = ["core.py"]
 

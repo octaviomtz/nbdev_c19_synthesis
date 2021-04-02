@@ -3,7 +3,7 @@
 __all__ = ['device', 'to_rgb', 'apply_dbscan_to_mask', 'grid_search_DBSCAN_params', 'label_mask_and_add_to_clusters',
            'merge_labeled_clusters', 'merge_labeled_clusters', 'get_min_max', 'pad_two_size_multiple_32',
            'correct_label_in_plot', 'get_big_lesions_labels', 'read_covid_CT_and_mask', 'normalize_rotate',
-           'normalizePatches', 'plot_3d_2', 'filename', 'path_source', 'path_dest']
+           'normalizePatches', 'plot_3d_2', 'len_multiple_32', 'select_lesions_match_conditions']
 
 # Cell
 import cv2
@@ -35,6 +35,9 @@ from scipy import ndimage
 device = 'cuda'
 matplotlib.rc('xtick', labelsize=20)
 matplotlib.rc('ytick', labelsize=20)
+
+# Cell
+from sklearn.cluster import DBSCAN
 
 # Cell
 def to_rgb(img, channel=1):
@@ -322,11 +325,33 @@ def plot_3d_2(image, image2, threshold=-300, detail_speed=1, detail_speed2=1, fi
     plt.show()
 
 # Cell
-filename = 'covid19-A-0003_ct.nii.gz'
-path_source = '/content/drive/My Drive/Datasets/covid19/COVID-19-20_v2/'
-path_dest = '/content/drive/My Drive/KCL/covid19/inpainting_results/'
+def len_multiple_32(ch, factor = 32):
+    '''get the min length of a side that it is a multiple of 32 '''
+    ch_max, ch_min = np.max(ch), np.min(ch)
+    ch_len = ch_max - ch_min
+    ch_len_multiple32 = ((ch_len-1) + factor) - ((ch_len-1) % factor)
+    return ch_min, ch_max, ch_len_multiple32
 
-ct, ct_mask, ct_seg = read_covid_CT_and_mask(path_source, filename)
-ct, ct_mask, ct_seg = normalize_rotate(ct, ct_mask, ct_seg)
-# plt.imshow(ct[...,100])
-# plt.imshow(ct_mask[...,100], alpha=.3);
+# Cell
+def select_lesions_match_conditions(small_lesions, skip_index=1, max_size=np.inf):
+  target_minis = []
+  target_minis_coords = []
+  target_minis_masks = []
+  target_minis_big = []
+  target_minis_coords_big = []
+  target_minis_masks_big = []
+  for i in np.unique(small_lesions):
+    mm = small_lesions==i
+    y_min, y_max, x_min, x_max, _, _ = get_min_max(np.expand_dims(mm,-1))
+    mask_mini = (small_lesions==i)[y_min:y_max,x_min:x_max]
+    target_mini = target_img_covid[y_min:y_max,x_min:x_max,SLICE]
+    if i > skip_index:
+      if np.sum(mm) < max_size:
+        target_minis.append(mask_mini*target_mini)
+        target_minis_coords.append((y_min, y_max, x_min, x_max))
+        target_minis_masks.append(mask_mini)
+      else:
+        target_minis_big.append(mask_mini*target_mini)
+        target_minis_coords_big.append((y_min, y_max, x_min, x_max))
+        target_minis_masks_big.append(mask_mini)
+  return target_minis, target_minis_coords, target_minis_masks, target_minis_big, target_minis_coords_big, target_minis_masks_big
