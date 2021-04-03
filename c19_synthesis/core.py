@@ -358,12 +358,14 @@ def select_lesions_match_conditions(small_lesions, target_img_covid, SLICE=50, s
   return target_minis, target_minis_coords, target_minis_masks, target_minis_big, target_minis_coords_big, target_minis_masks_big
 
 # Cell
-def make_list_of_targets_and_seeds(tgt_small, targets=False, seeds=False, seed_value=1):
+def make_list_of_targets_and_seeds(tgt_small, tgt_coords_small, tgt_masks_small, init_lists=True, seed_value=1, targets=[], seeds=[], masks=[], coords=[]):
   '''if no list is sent create lists of targets and their seeds, if a list is sent, append the new values '''
-  if targets==False:
+  if init_lists:
     targets = []
     seeds = []
-  for i in tgt_small:
+    masks = []
+    coords = []
+  for i, i_coords, i_mask in zip(tgt_small, tgt_coords_small, tgt_masks_small):
     target_temp = np.zeros((np.shape(i)[0],np.shape(i)[1],2))
     target_temp[...,0] = i
     mask_mini_closed = binary_closing(i>0)
@@ -376,4 +378,6 @@ def make_list_of_targets_and_seeds(tgt_small, targets=False, seeds=False, seed_v
       seed = np.zeros_like(mask_mini_dt)
       seed[yy[0], xx[0]] = seed_value
     seeds.append(seed)
-  return targets, seeds
+    coords.append(i_coords)
+    masks.append(i_mask)
+  return targets, coords, masks, seeds
