@@ -20,7 +20,8 @@ index = {"device": "00_core.ipynb",
          "select_lesions_match_conditions": "00_core.ipynb",
          "make_list_of_targets_and_seeds": "00_core.ipynb",
          "create_sobel_and_identity": "01_cellular_automata.ipynb",
-         "ca_model_perception": "01_cellular_automata.ipynb"}
+         "ca_model_perception": "01_cellular_automata.ipynb",
+         "plot_loss_and_lesion_synthesis": "01_cellular_automata.ipynb"}
 
 modules = ["core.py",
            "cellular_automata.py"]
