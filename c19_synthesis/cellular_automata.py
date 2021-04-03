@@ -58,6 +58,10 @@ class ca_model_perception(nn.Module):
         '''
         super(ca_model_perception, self).__init__()
 
+        self.ident = torch.tensor([[0.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,0.0]]).to(device)
+        self.sobel_x = (torch.tensor([[-1.0,0.0,1.0],[-2.0,0.0,2.0],[-1.0,0.0,1.0]])/8.0).to(device)
+        self.lap = (torch.tensor([[1.0,2.0,1.0],[2.0,-12,2.0],[1.0,2.0,1.0]])/16.0).to(device)
+
         if seq_layers is not None:
             self.model = seq_layers
         else:
@@ -94,7 +98,7 @@ class ca_model_perception(nn.Module):
         return y.reshape(b, -1, h, w)
 
     def perception(self, x):
-        filters = torch.stack([ident, sobel_x, sobel_x.T, lap])
+        filters = torch.stack([self.ident, self.sobel_x, self.sobel_x.T, self.lap])
         return self.perchannel_conv(x, filters)
 
     def normalize_grads(self):
@@ -134,7 +138,7 @@ class ca_model_perception(nn.Module):
             # alive_mask_dilated = torch.from_numpy(binary_closing(alive_mask[0].cpu().numpy() > 0.1)).float().to('cuda')
             target_loss  =  target_loss_func(x[:,:1, :,:] * alive_mask_dilated, target * alive_mask_dilated)
         else:
-            target_loss  =  target_loss_func(x[:,:2, :,:] * target_batch[:,1:,...], target * target_batch[:,1:,...]) # used to synthesize almost all nodules
+            target_loss  =  target_loss_func(x[:,:2, :,:] * target[:,1:,...], target * target[:,1:,...]) # used to synthesize almost all nodules
 
 
 
