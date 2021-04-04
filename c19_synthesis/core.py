@@ -4,7 +4,7 @@ __all__ = ['device', 'to_rgb', 'apply_dbscan_to_mask', 'grid_search_DBSCAN_param
            'merge_labeled_clusters', 'merge_labeled_clusters', 'get_min_max', 'pad_two_size_multiple_32',
            'correct_label_in_plot', 'get_big_lesions_labels', 'read_covid_CT_and_mask', 'normalize_rotate',
            'normalizePatches', 'plot_3d_2', 'len_multiple_32', 'select_lesions_match_conditions',
-           'make_list_of_targets_and_seeds']
+           'make_list_of_targets_and_seeds', 'adjust_coords_when_mask_not_in_origin']
 
 # Cell
 import cv2
@@ -381,3 +381,10 @@ def make_list_of_targets_and_seeds(tgt_small, tgt_coords_small, tgt_masks_small,
     coords.append(i_coords)
     masks.append(i_mask)
   return targets, coords, masks, seeds
+
+# Cell
+def adjust_coords_when_mask_not_in_origin(tgt_coords, coords_origin):
+  coords_adjusted = []
+  for i in tgt_coords:
+    coords_adjusted.append((i[0]+coords_origin[0], i[1]+coords_origin[0],i[2]+coords_origin[2],i[3]+coords_origin[2]))
+  return coords_adjusted
