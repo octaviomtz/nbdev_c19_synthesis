@@ -22,7 +22,8 @@ index = {"device": "00_core.ipynb",
          "adjust_coords_when_mask_not_in_origin": "00_core.ipynb",
          "create_sobel_and_identity": "01_cellular_automata.ipynb",
          "ca_model_perception": "01_cellular_automata.ipynb",
-         "plot_loss_and_lesion_synthesis": "01_cellular_automata.ipynb"}
+         "plot_loss_and_lesion_synthesis": "01_cellular_automata.ipynb",
+         "ca_model_perception_clamp": "01_cellular_automata.ipynb"}
 
 modules = ["core.py",
            "cellular_automata.py"]
