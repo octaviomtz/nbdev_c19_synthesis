@@ -309,7 +309,14 @@ class ca_model_perception_clamp(nn.Module):
         mask_diff = alive_mask - mask_previous
         mask = torch.clamp(torch.round(torch.rand_like(x[:,:1,:,:])) , 0,1)
         y = self.perception(x)
-        out = x + self.model(y)*mask
+        mask_new_cells_clamped = torch.clip((1-mask_diff)+.19,0,1) #make sure this is only applied to the first channel
+
+        mask_new_cells_clamped_ones = torch.ones_like(torch.squeeze(mask_new_cells_clamped))
+        mask_new_cells_clamped2 = torch.repeat_interleave(mask_new_cells_clamped,16,1)
+        for i in np.arange(1,16,1):
+          mask_new_cells_clamped2[:,i,:,:] = mask_new_cells_clamped_ones
+
+        out = x + self.model(y)*mask*mask_new_cells_clamped2
         out *= alive_mask
 
         return out, alive_mask, mask_diff

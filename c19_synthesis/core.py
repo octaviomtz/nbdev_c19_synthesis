@@ -344,6 +344,8 @@ def select_lesions_match_conditions(small_lesions, target_img_covid, SLICE=50, s
   for i in np.unique(small_lesions):
     mm = small_lesions==i
     y_min, y_max, x_min, x_max, _, _ = get_min_max(np.expand_dims(mm,-1))
+    y_max+=1
+    x_max+=1
     mask_mini = (small_lesions==i)[y_min:y_max,x_min:x_max]
     target_mini = target_img_covid[y_min:y_max,x_min:x_max,SLICE]
     if i > skip_index:
