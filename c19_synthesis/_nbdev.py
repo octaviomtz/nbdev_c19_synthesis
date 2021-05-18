@@ -25,11 +25,16 @@ index = {"device": "00_core.ipynb",
          "get_decreasing_sequence": "00_core.ipynb",
          "superpixels": "00_core.ipynb",
          "create_sobel_and_identity": "01_cellular_automata.ipynb",
+         "prepare_seed": "01_cellular_automata.ipynb",
+         "epochs_in_inner_loop": "01_cellular_automata.ipynb",
+         "ca_model_baseline": "01_cellular_automata.ipynb",
          "ca_model_perception": "01_cellular_automata.ipynb",
          "plot_loss_and_lesion_synthesis": "01_cellular_automata.ipynb",
          "ca_model_perception_clamp": "01_cellular_automata.ipynb",
          "ca_model_step_size": "01_cellular_automata.ipynb",
-         "ca_model_laplacian_regularizer": "01_cellular_automata.ipynb"}
+         "CeA_00": "01_cellular_automata.ipynb",
+         "ca_model_laplacian_regularizer": "01_cellular_automata.ipynb",
+         "ca_model_l2reg": "01_cellular_automata.ipynb"}
 
 modules = ["core.py",
            "cellular_automata.py"]
